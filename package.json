@@ -5,7 +5,9 @@
   "publishConfig": {
     "access": "public"
   },
-  "keywords": ["parcel", "netsuite", "suitescript", "optimizer"],
+  "keywords": [
+    "parcel", "netsuite", "suitescript", "optimizer"
+  ],
   "engines": {
     "parcel": "2.x"
   },
@@ -26,7 +28,7 @@
     }
   },
   "scripts": {
-    "build": "parcel build"
+    "test": "parcel build"
   },
   "repository": {
     "type": "git",
