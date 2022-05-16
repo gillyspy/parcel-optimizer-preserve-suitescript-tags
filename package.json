@@ -29,7 +29,7 @@
   },
   "scripts": {
     "build": "",
-    "test": "parcel build"
+    "test": "echo \"none specified. run parcel build\""
   },
   "repository": {
     "type": "git",
