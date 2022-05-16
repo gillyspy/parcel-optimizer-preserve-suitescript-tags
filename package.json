@@ -28,6 +28,7 @@
     }
   },
   "scripts": {
+    "build": "",
     "test": "parcel build"
   },
   "repository": {
