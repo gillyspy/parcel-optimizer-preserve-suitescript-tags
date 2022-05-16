@@ -1,11 +1,48 @@
 {
   "name": "parcel-optimizer-preserve-suitescript-tags",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "version": "0.1",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
   },
-  "author": "Gerald Gillespie",
-  "license": "ISC"
+  "engines": {
+    "parcel": "2.x"
+  },
+  "targets": {
+    "main": false,
+    "atest": {
+      "context": "browser",
+      "source":   ["test/suitescriptfile.js","test/helloWorld.js"] ,
+      "distDir": "dist",
+      "outputFormat": "global",
+      "optimize": true
+    }
+  },
+  "scripts": {
+    "build": "parcel build"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "main": "index.js",
+  "source": "index.js",
+  "author": "gillyspy <gillyspy@gmail.com>",
+  "dependencies": {
+    "@parcel/config-default": "^2.5.0",
+    "@parcel/plugin": "^2.0.0-beta.1",
+    "@parcel/utils": "^2.0.0-alpha.3"
+  },
+  "peerDependencies": {
+    "@parcel/source-map": "^2.0.0"
+  },
+  "description": "",
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "",
+  "devDependencies": {
+    "mocha": "^10.0.0",
+    "parcel-optimizer-preserve-suitescript-tags": "file:"
+  }
 }
