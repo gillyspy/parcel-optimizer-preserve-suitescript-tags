@@ -15,6 +15,9 @@
       "source":   ["test/suitescriptfile.js","test/helloWorld.js"] ,
       "distDir": "dist",
       "outputFormat": "global",
+      "engines" : {
+        "browsers": "Chrome 72"
+      },
       "optimize": true
     }
   },
