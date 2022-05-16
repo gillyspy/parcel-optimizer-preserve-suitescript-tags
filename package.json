@@ -1,0 +1,11 @@
+{
+  "name": "parcel-optimizer-preserve-suitescript-tags",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gerald Gillespie",
+  "license": "ISC"
+}
