@@ -58,7 +58,7 @@ module.exports = new Optimizer({
         const filePath = [asset.filePath].flat();
         let sourceCode;
         while( !header && filePath.length ){
-          console.log({path});
+          const path = filePath.shift();
            sourceCode = getSource(path);
         }
 
