@@ -20,18 +20,18 @@ function getSource(assetFile){
     // weird if we cannot find the file but we'll let it go and do nothing
   }
 }
- 
+
+function hasHeader(source){
+  return /@NApiVersion\s/i.test(source);
+}
+
 function createHeader(source) {
   if(!source) return '';
 
-  // test separately for regex performance reasons
-  const candidateRegex = /@NApiVersion\s/;
   const extractHeaderRegex=/^(\/\*\*(.*\s)+\*\/)(.*\s*)+/;
 
-  return candidateRegex.test(source) ? source.replace(extractHeaderRegex,'$1') : '' ;
+  return hasHeader(source) ? source.replace(extractHeaderRegex,'$1') : '' ;
 }
-
-let counter = 0; 
 
 module.exports = new Optimizer({
   async optimize({
@@ -42,12 +42,13 @@ module.exports = new Optimizer({
   }) {
     // only work with string buffers for now
     if( typeof contents !== 'string') return { contents, map };
-    
+
     // contents often does not contain the header we need but check first
+    if( hasHeader(contents) ) return {contents,map};
 
-    let header = createHeader(contents);
+    let header = '';
 
-    // if necessary, check the original file
+    // check the original source files
     if(!header){
       bundle.traverse( node => {
         if (node.type !== 'asset') {
@@ -65,8 +66,8 @@ module.exports = new Optimizer({
           header = createHeader( sourceCode ) + '\n';
       });
     }
-    
-    // still no header then nothing to do 
+
+    // still no header then nothing to do
     if( !header )
       return { contents, map };
 
@@ -76,10 +77,10 @@ module.exports = new Optimizer({
       const mapBuffer = map.toBuffer();
       const lineOffset = countLines(header) - 1;
       newMap.addBufferMappings(mapBuffer, lineOffset);
-    
+
       return { contents: header + contents, map: newMap };
     }
 
-    return { contents : header + contents, map }; 
+    return { contents : header + contents, map };
   }
 });
