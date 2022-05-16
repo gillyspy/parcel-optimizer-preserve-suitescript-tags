@@ -6,6 +6,7 @@
 ## Usage
 - create a `.parcelrc` like the one in this project
 - configure parcel as normal
+  - suggest `Chrome 72` as a SS2.1 compatible `package.json#targets.engine`
 - configure the glob pattern to only match potential suitescript files 
 
 ## Why
