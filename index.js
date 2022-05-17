@@ -81,9 +81,9 @@ module.exports = new Optimizer({
 
     let url = await getSourceMapReference(map);
 
+    process.stdout.write(`ℹ️ Setting sourceMappingURL`);
     contents = contents.replace(/sourceMappingURL.*\n/,`sourceMappingURL=${trimmed}.map\n`);
-
-    console.log({pathToUse, trimmed});
+   
     // update and return optimized content
     if (options.sourceMaps) {
       const newMap = new SourceMap(options.projectRoot);
