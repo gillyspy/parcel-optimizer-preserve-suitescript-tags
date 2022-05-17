@@ -7,12 +7,11 @@
  * @todo work with non-string buffers
  */
 const { Optimizer } = require('@parcel/plugin');
-const {
-  countLines,
-} = require('@parcel/utils');
+const {  countLines } = require('@parcel/utils');
 const SourceMap = require('@parcel/source-map').default;
 const fs = require('fs');
-const extractHeaderRegex = /^(\/\*\*[\s\S]+@NApiVersion[\s\S]+\*\/)[\s\S]+/;
+const hasHeaderRegex = /\/\*\*[\s\S]+@NApiVersion[\s\S]+?\*\//; 
+const extractHeaderRegex = /^(\/\*\*[\s\S]+@NApiVersion[\s\S]+?\*\/)[\s\S]+/;
 
 function getSource(assetFile){
   try{
@@ -22,7 +21,7 @@ function getSource(assetFile){
   }
 }
 
-const createHeader = (source)=> (source && extractHeaderRegex.test(source) ? source.replace(extractHeaderRegex,'$1') : '' );
+const createHeader = (source)=> (source && hasHeaderRegex.test(source) ? source.replace(extractHeaderRegex,'$1') : '' );
 
 
 function finish({ contents,map}){
@@ -35,7 +34,8 @@ module.exports = new Optimizer({
     bundle,
     contents,
     map,
-    options
+    options,
+    getSourceMapReference
   }) {
     process.stdout.write(`ℹ️ Processing preserve-suitescript-tags`);
 
@@ -43,12 +43,13 @@ module.exports = new Optimizer({
     if( typeof contents !== 'string') return finish({ contents, map });
 
     // contents often does not contain the header we need but check first
-    if( extractHeaderRegex.test(contents) ) {
+    if( hasHeaderRegex.test(contents) ) {
        process.stdout.write(`ℹ️ Found Header in contents\n`);
       return finish({ contents, map });
     }
 
     let header = '';
+    let pathToUse = '';
 
     // check the original source files
     if(!header){
@@ -62,8 +63,10 @@ module.exports = new Optimizer({
         while( !header && filePath.length ) {
           const path = filePath.shift();
           sourceCode = getSource(path);
-          if (sourceCode)
+          if (sourceCode){
             header = createHeader(sourceCode) + '\n';
+            pathToUse = path; 
+          }
 
           if(header) process.stdout.write(`ℹ️ Found Header in ${path}`)
         }
@@ -71,9 +74,14 @@ module.exports = new Optimizer({
     }
 
     // still no header then nothing to do
-    if( !header )
-      return finish({ contents, map });
 
+    const trimmed = pathToUse.replace(/^.*SuiteScripts\/?(.*)$/,'/SuiteScripts\/$1')
+    
+    let url = await getSourceMapReference(map);
+    
+    contents = contents.replace(/sourceMappingURL.*\n/,`sourceMappingURL=${trimmed}${url}\n`);
+      
+    
     // update and return optimized content
     if (options.sourceMaps) {
       const newMap = new SourceMap(options.projectRoot);
@@ -82,7 +90,8 @@ module.exports = new Optimizer({
       newMap.addBufferMappings(mapBuffer, lineOffset);
 
       return  finish({ contents: header + contents, map: newMap });
-    }
+    }      
+
 
     return finish({ contents : header + contents, map });
   }
