@@ -179,7 +179,7 @@ module.exports = new Optimizer({
     
     let url = await getSourceMapReference(map);
     
-    contents = contents.replace(/sourceMappingURL.*\n/,`sourceMappingURL=${trimmed}${url}\n`);
+    contents = contents.replace(/sourceMappingURL.*\n/,`sourceMappingURL=${trimmed}.map\n`);
       
     
     // update and return optimized content
