@@ -4,20 +4,33 @@
 `npm install parcel-optimizer-preserve-suitescript-tags --save-dev`;
 
 ## Usage
-- create a `.parcelrc` like the one in this project
+- create a `.parcelrc` like the example below in this project
 - configure parcel as normal
   - suggest `Chrome 72` as a SS2.1 compatible `package.json#targets.engine`
 - configure the glob pattern to only match potential suitescript files 
 
+## `.parcelrc`
+```json
+{
+           "extends": "@parcel/config-default",
+           "optimizers": {
+             "*.js" : ["parcel-optimizer-preserve-suitescript-tags"]
+           }
+ }
+ ```
+
 ## Why
-When building suitescripts via parcel it will often strip off the required comments at the top. This attempts to 
-restore that once per built file. 
-Note: there are combinations in parcel where this won't happen
+When building suitescripts via parcel it will often strip off NetSuite's required JSDoc comments at the top. This 
+attempts to restore that once per built file. 
+Note: there are combinations in parcel where this won't happen.
 
+## Typescript Tips
+There is a "bug" in Typescript where comments before the import will get stripped off
 
+This plugin will help with that. You can put the netsuite comments after the import!
 
 # Features
-- restores any stripped JSDoc tag comment that is required by netsuite but removed by parcel
+- restores any stripped JSDoc tag comment that is required by netsuite but removed / moved by parcel
 - will not duplicate the restored comment
 - if you list your primary file such that it is read first by parcel bundler then this optimizer's task time will be 
   faster. 

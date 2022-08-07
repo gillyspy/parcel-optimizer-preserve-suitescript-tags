@@ -11,6 +11,10 @@
     "suitescript",
     "optimizer"
   ],
+  "files" : ["index.js"],
+  "exports": {
+    "package.json" : "./package.json"
+  },
   "engines": {
     "parcel": "2.x"
   },
@@ -32,6 +36,12 @@
         "sourceRoot": "/SuiteScripts"
       }
     }
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@suitegeezus/eslint-config"
+    ]
   },
   "scripts": {
     "build": "",
@@ -58,6 +68,7 @@
   },
   "homepage": "",
   "devDependencies": {
+    "@suitegeezus/eslint-config": "^0.0.13",
     "parcel-optimizer-preserve-suitescript-tags": "file:"
   }
 }
