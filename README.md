@@ -29,6 +29,24 @@ There is a "bug" in Typescript where comments before the import will get strippe
 
 This plugin will help with that. You can put the netsuite comments after the import!
 
+It is expected that you will be using compiler settings similar to: 
+```json
+{
+    "module": "AMD",
+    "target": "es2019"
+}
+```
+
+Parcel does not like AMD very much so because of this an noop is injected in the global scope: 
+```javascript
+(function(){})(); // injected;
+define(["require","exports"],factory)
+```
+
+Without this parcel might export nothing. 
+
+If you use a module format of "UMD" this wouldn't be an issue but whatevs.
+
 # Features
 - restores any stripped JSDoc tag comment that is required by netsuite but removed / moved by parcel
 - will not duplicate the restored comment

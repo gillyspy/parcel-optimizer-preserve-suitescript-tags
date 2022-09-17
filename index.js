@@ -51,7 +51,7 @@ const createHeader = (source) => (source && hasHeaderRegex.test(source) ? source
  * @example //
  */
 function finish({ contents, map }) {
-  process.stdout.write(`ℹ️ Finished preserve-suitescript-tags`);
+  process.stdout.write(`ℹ️ Finished preserve-suitescript-tags\n`);
   return { contents, map };
 }
 
@@ -67,7 +67,7 @@ module.exports = new Optimizer({
    * @example //
    */
   async optimize({ bundle, contents, map, options }) {
-    process.stdout.write(`ℹ️ Processing preserve-suitescript-tags`);
+    process.stdout.write(`ℹ️ Processing preserve-suitescript-tags\n`);
 
     // only work with string buffers for now
     if (typeof contents !== 'string') return finish({ contents, map });
@@ -75,6 +75,7 @@ module.exports = new Optimizer({
     let pathToUse = '';
     let header;
     let tempContents = '';
+    const iifeToInject = '(function(){})()';
 
     // contents often does not contain the header we need but check first
     if (beginWithHeaderRegex.test(contents)) {
@@ -91,7 +92,7 @@ module.exports = new Optimizer({
       [pathToUse] = filePath;
       let sourceCode;
 
-      while (typeof header === 'undefined' && filePath.length) {
+      while ( header === '' && filePath.length) {
         const path = filePath.shift();
         sourceCode = getSource(path);
         if (sourceCode) {
@@ -100,8 +101,8 @@ module.exports = new Optimizer({
         }
 
         if (header) {
-          process.stdout.write(`ℹ️ Found Header in ${path}`);
-          tempContents = contents.replace(header, '');
+          process.stdout.write(`ℹ️ Found Header in ${path}\n`);
+          tempContents = contents.replace(header, iifeToInject);
         }
       }
     });
@@ -111,7 +112,7 @@ module.exports = new Optimizer({
     // remove indentations from header
     const finalHeader = `${header.replace(/^[ ]+[*]/gm, ' *')}\n`;
 
-    process.stdout.write(`ℹ️ Setting sourceMappingURL`);
+    process.stdout.write(`ℹ️ Setting sourceMappingURL\n`);
     const finalContents = finalHeader + tempContents.replace(/sourceMappingURL.*\n/, `sourceMappingURL=${trimmed}.map\n`);
 
     // update and return optimized content
