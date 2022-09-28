@@ -73,9 +73,9 @@ module.exports = new Optimizer({
     if (typeof contents !== 'string') return finish({ contents, map });
 
     let pathToUse = '';
-    let header;
+      let header='';
     let tempContents = '';
-    const iifeToInject = '(function(){})()';
+      const iifeToInject = ';(function(){})();\n';
 
     // contents often does not contain the header we need but check first
     if (beginWithHeaderRegex.test(contents)) {
@@ -110,7 +110,7 @@ module.exports = new Optimizer({
     const trimmed = pathToUse.replace(/^.*SuiteScripts\/?(.*)$/, '/SuiteScripts/$1');
 
     // remove indentations from header
-    const finalHeader = `${header.replace(/^[ ]+[*]/gm, ' *')}\n`;
+      const finalHeader = header ? `${header.replace(/^[ ]+[*]/gm, ' *')}\n` : ''; 
 
     process.stdout.write(`ℹ️ Setting sourceMappingURL\n`);
     const finalContents = finalHeader + tempContents.replace(/sourceMappingURL.*\n/, `sourceMappingURL=${trimmed}.map\n`);
