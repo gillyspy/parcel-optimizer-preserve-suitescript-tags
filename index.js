@@ -75,7 +75,7 @@ module.exports = new Optimizer({
     let pathToUse = '';
       let header='';
     let tempContents = '';
-      const iifeToInject = ';(function(){})();\n';
+      const iifeToInject = '\n(function(){})();\n';
 
     // contents often does not contain the header we need but check first
     if (beginWithHeaderRegex.test(contents)) {
